@@ -39,7 +39,7 @@ data:
         cpu: 250m
         memory: 64Mi
     storage: 50Mi
-    storageClassName: standard
+    storageClassName: crc-csi-hostpath-provisioner
   metrics.yaml: |
     port: 8080
   abn.yaml: |
