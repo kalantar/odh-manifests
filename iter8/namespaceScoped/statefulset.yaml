@@ -14,6 +14,8 @@ spec:
     spec:
       terminationGracePeriodSeconds: 10
       serviceAccountName: iter8
+      securityContext:
+        runAsNonRoot: true
       containers:
       - name: iter8-traffic
         image: iter8/iter8:0.15
@@ -51,15 +53,10 @@ spec:
             cpu: 250m
             memory: 64Mi
         securityContext:
-          readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
           capabilities:
             drop:
             - ALL
-          runAsNonRoot: true
-          runAsUser: 1000660099
-          seccompProfile:
-            type: RuntimeDefault
       volumes:
         - name: config
           configMap:

@@ -1,7 +1,7 @@
 bases:
 - ../namespaceScoped
 
-namespace: default
+namespace: opendatahub
 
 patches:
 - patch: |-
