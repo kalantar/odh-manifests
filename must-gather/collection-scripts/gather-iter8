@@ -1,0 +1,13 @@
+#!/bin/bash
+
+routemaps=$(oc get configmaps --all-namespaces --selector=iter8.tools/kind=routemap -o=jsonpath='{range.items[*]}{.metadata.namespa
+ce}{"\n"}{end}')
+
+# Get logs from all routemap namespaces
+for i in $routemaps;
+do
+# Get pod logs for all the pods in routemap namespaces
+oc adm inspect namespace/"$i" --dest-dir=must-gather || echo "Error getting logs from $i"
+
+done
+
