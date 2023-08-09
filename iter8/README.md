@@ -1,5 +1,7 @@
 # Iter8
 
+Iter8 is the Kubernetes release optimizer built for DevOps, MLOps, SRE and data science teams. Iter8 automates traffic control for new versions of apps/ML models in the cluster.
+
 Iter8 comes with one component:
 
 1. [Iter8](#Iter8)
@@ -9,22 +11,18 @@ Iter8 comes with one component:
 Contains deployment manifests for the Iter8 controller.
 
 - [iter8-controller](https://github.com/iter8-tools/iter8)
-  - forked upstream iter8-tools/iter8 repository
 
 ## Iter8 architecture
 
-## Iter8 manifests
+Iter8 has a controller that automatically reconfigures the Service Mesh when the set of versions of a model change. This capability enables blue-green and canary rollouts of new versions of a model.
 
 ## Installation process
-Following are the steps to install Model Mesh as a part of OpenDataHub install:
+Following are the steps to install Iter8 as a part of OpenDataHub install:
 
 1. Install the OpenDataHub operator.
-2. Make sure you install Service Mesh and Serverless components and configure them appropriately.
-See [OCP official instructions](https://docs.openshift.com/serverless/1.29/integrations/serverless-ossm-setup.html) and the 
-3. related documentation for [KServe on Openshift](https://github.com/kserve/kserve/blob/master/docs/OPENSHIFT_GUIDE.md#installation-with-service-mesh) from the kserve repo for more.
-4. Create a KfDef that includes the Iter8 component.
+2. Create a KfDef that includes the Iter8 component.
 
-```
+```yaml
 apiVersion: kfdef.apps.kubeflow.org/v1
 kind: KfDef
 metadata:
@@ -35,61 +33,24 @@ spec:
     - kustomizeConfig:
         repoRef:
           name: manifests
-          path: iter8/namespaceScoped
+          path: iter8/clusterScoped
       name: kserve
   repos:
     - name: manifests
-      uri: https://api.github.com/repos/opendatahub-io/odh-manifests/tarball/master
+      uri: https://api.github.com/repos/kalantar/odh-manifests/tarball/test
   version: master
 ```
+3. Install Service Mesh component and configure them appropriately.
+Provide details here.
 
-5. You can now create a new project.
-6. Make sure that you have a runtime defined in your target namespace (you can use a [template](https://github.com/opendatahub-io/odh-dashboard/blob/main/manifests/modelserving/ovms-ootb.yaml) in ODH).
+## Using Iter8 in ODH
 
-```yaml
-apiVersion: serving.kserve.io/v1alpha1
-kind: ServingRuntime
-metadata:
-  name: example-runtime
-spec:
-...
-```
-More information in the [KServe docs](https://kserve.github.io/website/0.10/modelserving/servingruntimes/).
+Iter8 can be used with Model Mesh Serving or with KServe.
 
-7. Create an `InferenceService` CR in your target namespace.
+### Model Mesh Serving
 
+See [Iter8](https://iter8.tools) for [blue-green](https://iter8.tools/0.15/tutorials/integrations/kserve-mm/blue-green/) and [canary](https://iter8.tools/0.15/tutorials/integrations/kserve-mm/canary/) rollout.
 
-## Using KServe in ODH
+### KServe
 
-You can use the `InferenceService` examples from KServe. Make sure to include the additional annotation for OpenShift Service Mesh:
-
-```yaml
-metadata:
-  annotations:
-    sidecar.istio.io/inject: "true"
-    sidecar.istio.io/rewriteAppHTTPProbers: "true"
-    serving.knative.openshift.io/enablePassthrough: "true"
-```
-
-Example:
-
-```yaml
-apiVersion: "serving.kserve.io/v1beta1"
-kind: "InferenceService"
-metadata:
-  name: "sklearn-iris"
-  namespace: kserve-demo
-  annotations:
-    sidecar.istio.io/inject: "true"
-    sidecar.istio.io/rewriteAppHTTPProbers: "true"
-    serving.knative.openshift.io/enablePassthrough: "true"
-spec:
-  predictor:
-    model:
-      runtime: <your-runtime>
-      modelFormat:
-        name: sklearn
-      storageUri: "gs://kfserving-examples/models/sklearn/1.0/model"
-```
-
-
+See [Iter8](https://iter8.tools) for [blue-green](https://iter8.tools/0.15/tutorials/integrations/kserve/blue-green/) and [canary](https://iter8.tools/0.15/tutorials/integrations/kserve/canary/) rollout.

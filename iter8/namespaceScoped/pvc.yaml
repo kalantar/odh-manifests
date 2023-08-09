@@ -8,4 +8,3 @@ spec:
   resources:
     requests:
       storage: 50Mi
-  storageClassName: crc-csi-hostpath-provisioner

@@ -16,5 +16,6 @@ oc logs deployment/opendatahub-operator -n openshift-operators >> must-gather/od
 /usr/bin/gather-data-science-pipelines
 /usr/bin/gather-model-mesh
 /usr/bin/gather-notebooks
+/usr/bin/gather-iter8
 exit 0
 
